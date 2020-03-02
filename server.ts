@@ -1,12 +1,10 @@
 import express from "express";
 import * as fs from "fs";
-import * as path from "path";
-import { startClient, ICfgMongo } from "./mongodb/lib";
+import { startClient, ICfgMongo } from "./lib";
 
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const defaultPort = process.env.PORT || 8888;
-const defaultControllersPath = "controllers";
 const app = express();
 app.use(cors());
 app.use(bodyParser.json({ type: "application/*+json" }));
@@ -14,16 +12,14 @@ app.use(bodyParser.json());
 
 export async function StartServer(config: {
   port?: number;
-  controllersPath?: string;
+  controllersPath: string;
   mongoDB: ICfgMongo;
 }) {
   await startClient(config.mongoDB);
 
   const port = config.port || defaultPort;
 
-  const controllersPath = config.controllersPath || defaultControllersPath;
-
-  await processRoutePath(path.join(__dirname, "/", controllersPath));
+  await processRoutePath(config.controllersPath);
 
   app.listen(port, () => {
     return console.log(`server is listening on ${port}`);
@@ -40,3 +36,14 @@ async function processRoutePath(route_path) {
     }
   });
 }
+
+/*
+StartServer({
+  controllersPath: "",
+  mongoDB: {
+    url:
+      "mongodb+srv://evandroneder:IXcPgcSSuWjWVMhh@cluster-ouywc.mongodb.net/test?retryWrites=true&w=majority",
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
+});*/

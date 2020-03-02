@@ -5,7 +5,8 @@
     "target": "es2018",
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "declaration": true
   },
   "lib": ["es2018"]
 }
