@@ -1,13 +1,19 @@
 {
   "name": "nd5-mongodb-server",
+<<<<<<< HEAD
   "version": "1.2.9",
+=======
+  "version": "1.1.5",
+>>>>>>> parent of 5c709b3... soh js
   "description": "",
-  "main": "server.js",
+  "main": "dist/server.js",
   "scripts": {
-    "start": "node server.js",
-    "build": "tsc"
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "postinstall": "npm run build"
   },
-  "types": "server.d.ts",
+  "prepublish": "tsc",
+  "types": "dist/server.d.ts",
   "private": false,
   "repository": {
     "type": "git",
@@ -17,7 +23,9 @@
   "author": "Evandro Neder Rosa",
   "license": "ISC",
   "devDependencies": {
-    "@types/express": "^4.17.2"
+    "@types/express": "^4.17.2",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.5"
   },
   "dependencies": {
     "@types/mongodb": "^3.3.16",
