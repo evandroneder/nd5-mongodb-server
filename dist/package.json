@@ -2,19 +2,10 @@
   "name": "nd5-mongodb-server",
   "version": "1.3.2",
   "description": "",
-  "main": "dist/server.js",
-  "scripts": {
-    "start": "node dist/server.js",
-    "build": "tsc",
-    "postinstall": "npm run build"
-  },
-  "prepublish": "tsc",
-  "types": "dist/server.d.ts",
+  "main": "server.js",
+  "scripts": {},
+  "types": "server.d.ts",
   "private": false,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/evandroneder/nd5-mongodb-server.git"
-  },
   "keywords": [],
   "author": "Evandro Neder Rosa",
   "license": "ISC",
