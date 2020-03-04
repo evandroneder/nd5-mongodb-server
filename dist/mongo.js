@@ -3,9 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongodb_1 = require("mongodb");
 var CONFIG;
 var CLIENT;
+var COLLECTIONS = [];
 async function startClient(cfg) {
     CONFIG = Object.assign({}, cfg);
     await getClient();
+    for (let c of CONFIG.collections)
+        await loadCollection(c);
 }
 exports.startClient = startClient;
 async function getClient() {
@@ -17,7 +20,9 @@ async function getClient() {
         throw err;
     }));
 }
-async function getColletion(config) {
+async function loadCollection(config) {
+    const dbName = config.db;
+    const collectionName = config.collection;
     const client = CLIENT;
     var db;
     var collection;
@@ -30,14 +35,17 @@ async function getColletion(config) {
         client.close();
         throw e;
     }
-    return { client, db, collection };
+    COLLECTIONS.push({ client, db, collection, dbName, collectionName });
+}
+function getColletion(config) {
+    let cfg = COLLECTIONS.find(c => c.dbName === config.db && c.collectionName === config.collection);
+    if (!cfg)
+        throw "Collection " +
+            config.collection +
+            " and db " +
+            config.db +
+            " not found.";
+    return cfg;
 }
 exports.getColletion = getColletion;
-function handleServerError(error) {
-    return {
-        status: 500,
-        error: error
-    };
-}
-exports.handleServerError = handleServerError;
 //# sourceMappingURL=mongo.js.map

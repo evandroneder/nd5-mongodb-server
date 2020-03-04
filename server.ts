@@ -37,13 +37,9 @@ async function processRoutePath(route_path) {
   });
 }
 
-/*
-StartServer({
-  controllersPath: "",
-  mongoDB: {
-    url:
-      "mongodb+srv://evandroneder:IXcPgcSSuWjWVMhh@cluster-ouywc.mongodb.net/test?retryWrites=true&w=majority",
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  }
-});*/
+export function handleServerError(error: any) {
+  return {
+    status: 500,
+    error: error
+  };
+}

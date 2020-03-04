@@ -39,14 +39,11 @@ async function processRoutePath(route_path) {
         }
     });
 }
-/*
-StartServer({
-  controllersPath: "",
-  mongoDB: {
-    url:
-      "mongodb+srv://evandroneder:IXcPgcSSuWjWVMhh@cluster-ouywc.mongodb.net/test?retryWrites=true&w=majority",
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  }
-});*/
+function handleServerError(error) {
+    return {
+        status: 500,
+        error: error
+    };
+}
+exports.handleServerError = handleServerError;
 //# sourceMappingURL=server.js.map

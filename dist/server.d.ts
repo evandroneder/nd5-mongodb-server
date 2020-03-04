@@ -4,3 +4,7 @@ export declare function StartServer(config: {
     controllersPath: string;
     mongoDB: db.ICfgMongo;
 }): Promise<void>;
+export declare function handleServerError(error: any): {
+    status: number;
+    error: any;
+};
