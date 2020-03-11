@@ -6,5 +6,5 @@ export declare function StartServer(config: {
 }): Promise<void>;
 export declare function handleServerError(error: any): {
     status: number;
-    error: any;
+    message: any;
 };

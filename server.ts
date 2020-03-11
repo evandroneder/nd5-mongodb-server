@@ -40,6 +40,6 @@ async function processRoutePath(route_path) {
 export function handleServerError(error: any) {
   return {
     status: 500,
-    error: error
+    message: error
   };
 }

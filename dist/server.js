@@ -42,7 +42,7 @@ async function processRoutePath(route_path) {
 function handleServerError(error) {
     return {
         status: 500,
-        error: error
+        message: error
     };
 }
 exports.handleServerError = handleServerError;
