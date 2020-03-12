@@ -1,14 +1,12 @@
-import express from "express";
-import * as fs from "fs";
 import * as db from "./mongo";
-import socketIO from "socket.io";
-import http from "http";
+import * as fs from "fs";
 
+const express = require("express");
+const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const defaultPort = process.env.PORT || 8888;
-const defaultHost = "127.0.0.1";
-const app = express();
+const defaultPort = process.env.PORT || 3000;
+
 app.use(cors());
 app.use(bodyParser.json({ type: "application/*+json" }));
 app.use(bodyParser.json());
@@ -25,17 +23,15 @@ export async function StartServer(config: {
 
   await processRoutePath(config.controllersPath);
 
-  if (config.socketServer) {
-    const server = http.createServer(app);
-    const io = socketIO(server);
-    config.socketServer(io);
-    server.listen(port + 1, defaultHost, () => {
-      console.log(`Socket is listening on ${port + 1}`);
-    });
-  }
-  app.listen(port, defaultHost, () => {
+  const server = app.listen(port, () => {
     console.log(`server is listening on ${port}`);
   });
+
+  if (config.socketServer) {
+    const io = require("socket.io").listen(server);
+    config.socketServer(io);
+    console.log("Socket activated.");
+  }
 }
 
 async function processRoutePath(route_path) {

@@ -1,7 +1,4 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -10,16 +7,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const fs = __importStar(require("fs"));
 const db = __importStar(require("./mongo"));
-const socket_io_1 = __importDefault(require("socket.io"));
-const http_1 = __importDefault(require("http"));
+const fs = __importStar(require("fs"));
+const express = require("express");
+const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const defaultPort = process.env.PORT || 8888;
-const defaultHost = "127.0.0.1";
-const app = express_1.default();
+const defaultPort = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json({ type: "application/*+json" }));
 app.use(bodyParser.json());
@@ -27,17 +21,14 @@ async function StartServer(config) {
     await db.startClient(config.mongoDB);
     const port = Number(config.port || defaultPort);
     await processRoutePath(config.controllersPath);
-    if (config.socketServer) {
-        const server = http_1.default.createServer(app);
-        const io = socket_io_1.default(server);
-        config.socketServer(io);
-        server.listen(port + 1, defaultHost, () => {
-            console.log(`Socket is listening on ${port + 1}`);
-        });
-    }
-    app.listen(port, defaultHost, () => {
+    const server = app.listen(port, () => {
         console.log(`server is listening on ${port}`);
     });
+    if (config.socketServer) {
+        const io = require("socket.io").listen(server);
+        config.socketServer(io);
+        console.log("Socket activated.");
+    }
 }
 exports.StartServer = StartServer;
 async function processRoutePath(route_path) {
