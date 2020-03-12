@@ -1,6 +1,6 @@
 {
   "name": "nd5-mongodb-server",
-  "version": "1.4.8",
+  "version": "1.5.3",
   "description": "",
   "main": "dist/server.js",
   "scripts": {
@@ -20,7 +20,17 @@
     "mongodb",
     "server",
     "api",
-    "rest"
+    "rest",
+    "realtime",
+    "websocket",
+    "websockets",
+    "socket",
+    "io",
+    "event",
+    "http",
+    "https",
+    "service",
+    "async"
   ],
   "author": "Evandro Neder Rosa",
   "license": "ISC",

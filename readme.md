@@ -1,10 +1,10 @@
 # Project
 
-Dynamic express with mongodb.
+Dynamic express server with mongodb and websocket.
 
 ### How to use
 
-- To start the server call function StartServer
+- To start the express server call function StartServer
 
 ```
 import { StartServer } from "nd5-mongodb-server";
@@ -17,15 +17,37 @@ const dbs = [
 const mongodb = "mongodb+srv://<username>:<password>@cluster-ouywc.mongodb.net/test?retryWrites=true&w=majority"
 
 StartServer({
-  port: 3000,
   controllersPath: path.join(__dirname, "src", "/", "controllers"),
   mongoDB: {
     url: mongodb
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    dbs: dbs
+    dbs: dbs,
+    socketServer: socketServer
   }
 });
+
+function socketServer(io: SocketIO.Server) {
+  io.on("connection", client => {
+    console.log("Client " + client.id + " connected.");
+
+    io.emit("message", {
+      message: "Hello clients, new connection " + client.id
+    });
+
+    client.on("message", () => {
+      io.emit("message", {
+        message: "You have new message from " + client.id
+      });
+    });
+    client.on("disconnect", () => {
+      console.log("Good bye " + client.id);
+      io.emit("message", {
+        message: "Client " + client.id + " disconnected =("
+      });
+    });
+  });
+}
 ```
 
 ## Creating your route
