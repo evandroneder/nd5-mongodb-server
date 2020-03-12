@@ -7,6 +7,7 @@ import http from "http";
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const defaultPort = process.env.PORT || 8888;
+const defaultHost = "127.0.0.1";
 const app = express();
 app.use(cors());
 app.use(bodyParser.json({ type: "application/*+json" }));
@@ -20,7 +21,7 @@ export async function StartServer(config: {
 }) {
   await db.startClient(config.mongoDB);
 
-  const port = config.port || defaultPort;
+  const port = Number(config.port || defaultPort);
 
   await processRoutePath(config.controllersPath);
 
@@ -28,10 +29,12 @@ export async function StartServer(config: {
     const server = http.createServer(app);
     const io = socketIO(server);
     config.socketServer(io);
-    console.log("Socket activated!");
+    server.listen(port + 1, defaultHost, () => {
+      console.log(`Socket is listening on ${port + 1}`);
+    });
   }
-  app.listen(port, () => {
-    return console.log(`server is listening on ${port}`);
+  app.listen(port, defaultHost, () => {
+    console.log(`server is listening on ${port}`);
   });
 }
 
