@@ -4,7 +4,7 @@ export interface ICfgMongo {
   url: string;
   useNewUrlParser: boolean;
   useUnifiedTopology: boolean;
-  dbs: { db: { name: string; collections: string[]; };
+  dbs: { name: string; collections: string[] }[];
 }
 
 interface ICfgCollection {
@@ -25,8 +25,8 @@ export async function startClient(cfg: ICfgMongo) {
   CONFIG = Object.assign({}, cfg);
   await getClient();
   for (let db of CONFIG.dbs)
-    for(let c of db.collections)
-      await loadCollection(c);
+    for (let c of db.collections)
+      await loadCollection({ db: db.name, collection: c });
 }
 
 async function getClient(): Promise<MongoClient> {

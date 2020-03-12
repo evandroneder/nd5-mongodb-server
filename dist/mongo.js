@@ -7,14 +7,15 @@ var COLLECTIONS = [];
 async function startClient(cfg) {
     CONFIG = Object.assign({}, cfg);
     await getClient();
-    for (let c of CONFIG.collections)
-        await loadCollection(c);
+    for (let db of CONFIG.dbs)
+        for (let c of db.collections)
+            await loadCollection({ db: db.name, collection: c });
 }
 exports.startClient = startClient;
 async function getClient() {
     return (CLIENT = await mongodb_1.MongoClient.connect(CONFIG.url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
+        useNewUrlParser: CONFIG.useNewUrlParser,
+        useUnifiedTopology: CONFIG.useUnifiedTopology
     }).catch(err => {
         console.log(err);
         throw err;

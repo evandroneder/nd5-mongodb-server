@@ -13,6 +13,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const fs = __importStar(require("fs"));
 const db = __importStar(require("./mongo"));
+const socket_io_1 = __importDefault(require("socket.io"));
+const http_1 = __importDefault(require("http"));
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const defaultPort = process.env.PORT || 8888;
@@ -24,6 +26,12 @@ async function StartServer(config) {
     await db.startClient(config.mongoDB);
     const port = config.port || defaultPort;
     await processRoutePath(config.controllersPath);
+    if (config.socketServer) {
+        const server = http_1.default.createServer(app);
+        const io = socket_io_1.default(server);
+        config.socketServer(io);
+        console.log("Socket activated!");
+    }
     app.listen(port, () => {
         return console.log(`server is listening on ${port}`);
     });

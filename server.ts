@@ -1,6 +1,8 @@
 import express from "express";
 import * as fs from "fs";
 import * as db from "./mongo";
+import socketIO from "socket.io";
+import http from "http";
 
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -14,6 +16,7 @@ export async function StartServer(config: {
   port?: number;
   controllersPath: string;
   mongoDB: db.ICfgMongo;
+  socketServer: Function;
 }) {
   await db.startClient(config.mongoDB);
 
@@ -21,6 +24,12 @@ export async function StartServer(config: {
 
   await processRoutePath(config.controllersPath);
 
+  if (config.socketServer) {
+    const server = http.createServer(app);
+    const io = socketIO(server);
+    config.socketServer(io);
+    console.log("Socket activated!");
+  }
   app.listen(port, () => {
     return console.log(`server is listening on ${port}`);
   });

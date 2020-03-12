@@ -3,9 +3,9 @@ export interface ICfgMongo {
     url: string;
     useNewUrlParser: boolean;
     useUnifiedTopology: boolean;
-    collections: {
-        db: string;
-        collection: string;
+    dbs: {
+        name: string;
+        collections: string[];
     }[];
 }
 interface ICfgCollection {
