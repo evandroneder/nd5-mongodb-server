@@ -10,8 +10,8 @@ Dynamic express with mongodb.
 import { StartServer } from "nd5-mongodb-server";
 import * as path from "path";
 
-const collections = [
-  { db: "test", collection: "cars" },
+const dbs = [
+  { db: { name: "test", collections: ["cars"] } },
 ];
 
 const mongodb = "mongodb+srv://<username>:<password>@cluster-ouywc.mongodb.net/test?retryWrites=true&w=majority"
@@ -23,7 +23,7 @@ StartServer({
     url: mongodb
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    collections: collections
+    dbs: dbs
   }
 });
 ```
@@ -37,13 +37,15 @@ StartServer({
 
 ```
 import { handleServerError } from "nd5-mongodb-server";
+import * as carsCollections from "./../collections/cars";
 import express from "express";
 
 const carsRouter = express.Router();
 
 carsRouter.get("/", async (req, res) => {
   try {
-    res.json({});
+    let cars = await carsCollection.getCars();
+    res.json(cars);
   } catch (e) {
     res.status(500).json(handleServerError(e));
   }
@@ -66,7 +68,7 @@ export interface ICar {
 
 const { collection } = getColletion({
   collection: "cars",
-  db: environment.db
+  db: "test"
 });
 
 export async function getCars(): Promise<Array<ICar>> {
