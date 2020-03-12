@@ -4,7 +4,7 @@ export interface ICfgMongo {
   url: string;
   useNewUrlParser: boolean;
   useUnifiedTopology: boolean;
-  collections: { db: string; collection: string }[];
+  dbs: { db: { name: string; collection: string[]; };
 }
 
 interface ICfgCollection {
@@ -24,13 +24,15 @@ var COLLECTIONS: ICfgCollection[] = [];
 export async function startClient(cfg: ICfgMongo) {
   CONFIG = Object.assign({}, cfg);
   await getClient();
-  for (let c of CONFIG.collections) await loadCollection(c);
+  for (let db of CONFIG.dbs)
+    for(let c of db.collections)
+      await loadCollection(c);
 }
 
 async function getClient(): Promise<MongoClient> {
   return (CLIENT = await MongoClient.connect(CONFIG.url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+    useNewUrlParser: CONFIG.useNewUrlParser,
+    useUnifiedTopology: CONFIG.useUnifiedTopology
   }).catch(err => {
     console.log(err);
     throw err;
