@@ -17,6 +17,7 @@ const dbs = [
 const mongodb = "mongodb+srv://<username>:<password>@cluster-ouywc.mongodb.net/test?retryWrites=true&w=majority"
 
 StartServer({
+  middleWare: middleWare
   controllersPath: path.join(__dirname, "src", "/", "controllers"),
   mongoDB: {
     url: mongodb
@@ -47,6 +48,11 @@ function socketServer(io: SocketIO.Server) {
       });
     });
   });
+}
+
+
+function middleWare(req, res, next) {
+    next();
 }
 ```
 

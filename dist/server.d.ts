@@ -1,5 +1,6 @@
 import * as db from "./mongo";
 export declare function StartServer(config: {
+    middleWare?: Function;
     port?: number;
     controllersPath: string;
     mongoDB: db.ICfgMongo;

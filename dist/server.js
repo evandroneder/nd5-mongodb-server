@@ -20,6 +20,11 @@ app.use(bodyParser.json());
 async function StartServer(config) {
     await db.startClient(config.mongoDB);
     const port = Number(config.port || defaultPort);
+    if (config.middleWare) {
+        app.use((req, res, next) => {
+            config.middleWare(req, res, next);
+        });
+    }
     await processRoutePath(config.controllersPath);
     const server = app.listen(port, () => {
         console.log(`server is listening on ${port}`);

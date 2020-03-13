@@ -12,6 +12,7 @@ app.use(bodyParser.json({ type: "application/*+json" }));
 app.use(bodyParser.json());
 
 export async function StartServer(config: {
+  middleWare?: Function;
   port?: number;
   controllersPath: string;
   mongoDB: db.ICfgMongo;
@@ -20,6 +21,12 @@ export async function StartServer(config: {
   await db.startClient(config.mongoDB);
 
   const port = Number(config.port || defaultPort);
+
+  if (config.middleWare) {
+    app.use((req, res, next) => {
+      config.middleWare(req, res, next);
+    });
+  }
 
   await processRoutePath(config.controllersPath);
 
