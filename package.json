@@ -1,6 +1,6 @@
 {
   "name": "nd5-mongodb-server",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "description": "",
   "main": "dist/server.js",
   "scripts": {

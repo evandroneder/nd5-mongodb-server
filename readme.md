@@ -17,14 +17,14 @@ const dbs = [
 const mongodb = "mongodb+srv://<username>:<password>@cluster-ouywc.mongodb.net/test?retryWrites=true&w=majority"
 
 StartServer({
-  middleWare: middleWare
+  middleWare: middleWare,
+  socketServer: socketServer,
   controllersPath: path.join(__dirname, "src", "/", "controllers"),
   mongoDB: {
     url: mongodb
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    dbs: dbs,
-    socketServer: socketServer
+    dbs: dbs
   }
 });
 
