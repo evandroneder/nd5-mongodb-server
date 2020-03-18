@@ -1,3 +1,4 @@
+import http from "http";
 import * as db from "./mongo";
 import * as fs from "fs";
 
@@ -22,11 +23,12 @@ export async function StartServer(config: {
 
   const port = Number(config.port || defaultPort);
 
-  if (config.middleWare) {
-    app.use((req, res, next) => {
-      config.middleWare(req, res, next);
-    });
-  }
+  app.use(
+    (req: http.IncomingMessage, res: http.RequestOptions, next: Function) => {
+      if (config.middleWare) config.middleWare(req, res, next);
+      else next();
+    }
+  );
 
   await processRoutePath(config.controllersPath);
 
@@ -41,7 +43,7 @@ export async function StartServer(config: {
   }
 }
 
-async function processRoutePath(route_path) {
+async function processRoutePath(route_path: string) {
   fs.readdirSync(route_path).forEach(async function(file) {
     var filepath = route_path + "/" + file;
     if (file.indexOf(".map") === -1) {

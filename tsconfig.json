@@ -4,9 +4,11 @@
     "esModuleInterop": true,
     "target": "es2018",
     "moduleResolution": "node",
-    "sourceMap": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
     "outDir": "dist",
-    "declaration": true
+    "declaration": true,
+    "strict": true
   },
   "lib": ["es2018"]
 }
