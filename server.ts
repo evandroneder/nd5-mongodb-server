@@ -1,4 +1,3 @@
-import http from "http";
 import * as db from "./mongo";
 import * as fs from "fs";
 
@@ -23,12 +22,10 @@ export async function StartServer(config: {
 
   const port = Number(config.port || defaultPort);
 
-  app.use(
-    (req: http.IncomingMessage, res: http.RequestOptions, next: Function) => {
-      if (config.middleWare) config.middleWare(req, res, next);
-      else next();
-    }
-  );
+  app.use((req: any, res: any, next: Function) => {
+    if (config.middleWare) config.middleWare(req, res, next);
+    else next();
+  });
 
   await processRoutePath(config.controllersPath);
 
