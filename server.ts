@@ -1,28 +1,28 @@
 import * as db from "./mongo";
 import * as fs from "fs";
-
-const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
-const cors = require("cors");
+import express from "express";
+import bodyParser from "body-parser";
+import { IRequest, IResponse } from "./core";
+import cors from "cors";
 const defaultPort = process.env.PORT || 3000;
+const app = express();
 
 app.use(cors());
 app.use(bodyParser.json({ type: "application/*+json" }));
 app.use(bodyParser.json());
 
 export async function StartServer(config: {
-  middleWare?: Function;
+  middleWare?: (req: IRequest, res: IResponse, next: () => void) => void;
   port?: number;
   controllersPath: string;
   mongoDB: db.ICfgMongo;
-  socketServer: Function;
+  socketServer: (io: SocketIO.Server) => void;
 }) {
   await db.startClient(config.mongoDB);
 
   const port = Number(config.port || defaultPort);
 
-  app.use((req: any, res: any, next: Function) => {
+  app.use((req: any, res: any, next: () => void) => {
     if (config.middleWare) config.middleWare(req, res, next);
     else next();
   });
@@ -45,15 +45,8 @@ async function processRoutePath(route_path: string) {
     var filepath = route_path + "/" + file;
     if (file.indexOf(".map") === -1) {
       const name = file.split(".")[0];
-      console.info("Loading route: " + name);
+      console.log("Loading route: " + name);
       app.use("/" + name, require(filepath));
     }
   });
-}
-
-export function handleServerError(error: any) {
-  return {
-    status: 500,
-    message: error
-  };
 }

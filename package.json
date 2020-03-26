@@ -1,6 +1,6 @@
 {
   "name": "nd5-mongodb-server",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "",
   "main": "dist/server.js",
   "scripts": {
@@ -34,17 +34,18 @@
   ],
   "author": "Evandro Neder Rosa",
   "license": "ISC",
-  "devDependencies": {
-    "@types/express": "^4.17.2",
-    "tslint": "^6.0.0",
-    "typescript": "^3.7.5"
-  },
   "dependencies": {
+    "@types/socket.io": "^2.1.4",
+    "@types/express": "^4.17.2",
+    "@types/cors": "^2.8.6",
     "@types/mongodb": "3.5.1",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.5",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongodb": "3.5.4",
     "socket.io": "^2.3.0"
-  }
+  },
+  "devDependencies": {}
 }
