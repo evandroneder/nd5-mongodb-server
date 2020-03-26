@@ -2,7 +2,6 @@ import * as db from "./mongo";
 import * as fs from "fs";
 import express from "express";
 import bodyParser from "body-parser";
-import { IRequest, IResponse } from "./core";
 import cors from "cors";
 const defaultPort = process.env.PORT || 3000;
 const app = express();
@@ -12,7 +11,7 @@ app.use(bodyParser.json({ type: "application/*+json" }));
 app.use(bodyParser.json());
 
 export async function StartServer(config: {
-  middleWare?: (req: IRequest, res: IResponse, next: () => void) => void;
+  middleWare?: (req: any, res: any, next: () => void) => void;
   port?: number;
   controllersPath: string;
   mongoDB: db.ICfgMongo;
