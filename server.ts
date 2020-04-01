@@ -39,13 +39,13 @@ export async function StartServer(config: {
   }
 }
 
-async function processRoutePath(route_path: string) {
-  fs.readdirSync(route_path).forEach(async function(file) {
-    var filepath = route_path + "/" + file;
+async function processRoutePath(routerPath: string) {
+  fs.readdirSync(routerPath).forEach(async file => {
+    const filePath = routerPath + "/" + file;
     if (file.indexOf(".map") === -1) {
       const name = file.split(".")[0];
       console.log("Loading route: " + name);
-      app.use("/" + name, require(filepath));
+      app.use("/" + name, require(filePath));
     }
   });
 }

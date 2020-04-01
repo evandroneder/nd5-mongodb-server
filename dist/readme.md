@@ -17,9 +17,9 @@ const dbs = [
 const mongodb = "mongodb+srv://<username>:<password>@cluster-ouywc.mongodb.net/test?retryWrites=true&w=majority"
 
 StartServer({
-  middleWare: middleWare,
-  socketServer: socketServer,
-  controllersPath: path.join(__dirname, "src", "/", "controllers"),
+  middleWare,
+  socketServer,
+  controllersPath: path.join(__dirname, "src", "controllers"),
   mongoDB: {
     url: mongodb
     useNewUrlParser: true,
@@ -50,7 +50,6 @@ function socketServer(io: SocketIO.Server) {
   });
 }
 
-
 function middleWare(req, res, next) {
     next();
 }
@@ -60,26 +59,24 @@ function middleWare(req, res, next) {
 
 - Create src/controllers path.
 - Create file into controllers path. The file name represents route path.
-- The const router name must contain 'Router' at the end (dynamic loading of the routes)
 - Example file cars:
 
 ```
-import { handleServerError } from "nd5-mongodb-server";
 import * as carsCollections from "./../collections/cars";
 import express from "express";
 
-const carsRouter = express.Router();
+const router = express.Router();
 
-carsRouter.get("/", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     let cars = await carsCollection.getCars();
     res.json(cars);
   } catch (e) {
-    res.status(500).json(handleServerError(e));
+    res.status(500).json(e);
   }
 });
 
-module.exports = carsRouter;
+module.exports = router;
 ```
 
 ## Creating your collection controller
@@ -99,7 +96,7 @@ const { collection } = getColletion({
   db: "test"
 });
 
-export async function getCars(): Promise<Array<ICar>> {
+export async function getCars(): Promise<ICar[]> {
   try {
     return await collection.find().toArray();
   } catch (e) {

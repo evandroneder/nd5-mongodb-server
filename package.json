@@ -1,11 +1,11 @@
 {
   "name": "nd5-mongodb-server",
-  "version": "1.6.5",
+  "version": "1.6.6",
   "description": "",
   "main": "dist/server.js",
   "scripts": {
     "start": "node dist/server.js",
-    "build": "rm -rf dist && tsc && cp package.json dist/ && cp readme.md dist/",
+    "build": " tsc && cp readme.md dist/",
     "postinstall": "npm run build"
   },
   "prepublish": "tsc",
