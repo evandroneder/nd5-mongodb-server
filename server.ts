@@ -1,5 +1,5 @@
-import * as db from "./mongo";
-import * as fs from "fs";
+import { ICfgMongo, startClient } from "./mongo";
+import { readdirSync } from "fs";
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -12,12 +12,13 @@ app.use(bodyParser.json());
 
 export async function StartServer(config: {
   middleWare?: (req: any, res: any, next: () => void) => void;
+  staticPath?: string;
   port?: number;
   controllersPath: string;
-  mongoDB: db.ICfgMongo;
+  mongoDB: ICfgMongo;
   socketServer: (io: SocketIO.Server) => void;
 }) {
-  await db.startClient(config.mongoDB);
+  await startClient(config.mongoDB);
 
   const port = Number(config.port || defaultPort);
 
@@ -25,6 +26,10 @@ export async function StartServer(config: {
     if (config.middleWare) config.middleWare(req, res, next);
     else next();
   });
+
+  if (config.staticPath) {
+    app.use(express.static(config.staticPath));
+  }
 
   await processRoutePath(config.controllersPath);
 
@@ -40,7 +45,7 @@ export async function StartServer(config: {
 }
 
 async function processRoutePath(routerPath: string) {
-  fs.readdirSync(routerPath).forEach(async file => {
+  readdirSync(routerPath).forEach(async (file) => {
     const filePath = routerPath + "/" + file;
     if (file.indexOf(".map") === -1) {
       const name = file.split(".")[0];

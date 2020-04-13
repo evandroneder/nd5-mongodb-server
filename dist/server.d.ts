@@ -1,9 +1,10 @@
 /// <reference types="socket.io" />
-import * as db from "./mongo";
+import { ICfgMongo } from "./mongo";
 export declare function StartServer(config: {
     middleWare?: (req: any, res: any, next: () => void) => void;
+    staticPath?: string;
     port?: number;
     controllersPath: string;
-    mongoDB: db.ICfgMongo;
+    mongoDB: ICfgMongo;
     socketServer: (io: SocketIO.Server) => void;
 }): Promise<void>;
