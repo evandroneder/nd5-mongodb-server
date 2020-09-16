@@ -23,17 +23,17 @@ var COLLECTIONS: ICfgCollection[] = [];
 
 export async function startClient(cfg: ICfgMongo) {
   CONFIG = Object.assign({}, cfg);
-  await getClient();
+  await loadClient();
   for (let db of CONFIG.dbs)
     for (let c of db.collections)
       await loadCollection({ db: db.name, collection: c });
 }
 
-async function getClient(): Promise<MongoClient> {
+async function loadClient(): Promise<MongoClient> {
   return (CLIENT = await MongoClient.connect(CONFIG.url, {
     useNewUrlParser: CONFIG.useNewUrlParser,
-    useUnifiedTopology: CONFIG.useUnifiedTopology
-  }).catch(err => {
+    useUnifiedTopology: CONFIG.useUnifiedTopology,
+  }).catch((err) => {
     console.log(err);
     throw err;
   }));
@@ -64,15 +64,17 @@ export function getColletion(config: {
   db: string;
   collection: string;
 }): ICfgCollection {
-  let cfg = COLLECTIONS.find(
-    c => c.dbName === config.db && c.collectionName === config.collection
+  const cfg = COLLECTIONS.find(
+    (c) => c.dbName === config.db && c.collectionName === config.collection
   );
   if (!cfg)
-    throw "Collection " +
-      config.collection +
-      " and db " +
-      config.db +
-      " not found.";
+    throw (
+      "Collection " + config.collection + " and db " + config.db + " not found."
+    );
 
   return cfg;
+}
+
+export function getClient() {
+  return CLIENT;
 }
