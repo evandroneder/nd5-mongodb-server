@@ -20,4 +20,5 @@ export declare function getColletion(config: {
     db: string;
     collection: string;
 }): ICfgCollection;
+export declare function getClient(): MongoClient;
 export {};
